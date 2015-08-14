@@ -75,7 +75,7 @@ png("AVEplot.png", width=480, height=480, bg="white")
 aveplot <- ggplot(act.meanint$interval, act.meanint$interval"Mean Steps", type="n",
   main="Time Series Plot of Average # of Steps Taken"
   xlab= "5 Minutes Intervals"
-  ylab= "AVerage # of Steps Taken")
+  ylab= "AVerage # of Steps Taken"
 
 dev.off()
 
@@ -86,6 +86,10 @@ Maxint <- act.meanint$interval[Maxint]
 
 ## Imputing missing values
 
+#### 1. Calculate and report the total number of missing values in the dataset
 
+NA <- sum(is.na(act$steps))
+
+### 2. Fill in the missing values in the dataset
 
 ## Are there differences in activity patterns between weekdays and weekends?
