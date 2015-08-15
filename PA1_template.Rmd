@@ -54,7 +54,7 @@ names(act.meanint)[2] <- "MeanSteps"
 ## What is mean total number of steps taken per day?
 
 ### 1. Make a histogram of total number of steps taken each day (ignore missing values)
-```{r}
+```{r echo=TRUE}
 act.dayNA <- act.day[!is.na(act.day$Steps), ]
 
 png("ACTday.png", width=480, height=480, bg="white")
@@ -69,13 +69,13 @@ hist(act.day$Steps,
 ### 2. Calcutae and report the mean and median totla bumber of steps taken  
   
 ### Mean number of steps taken each day  
-```{r}
+```{r echo=TRUE}
 act.mean <- mean(act.day$Steps, na.rm=TRUE)
 mean(act.mean)
 ```
 
 ### Median number of steps taken each day
-```{r}
+```{r echo=TRUE}
 act.median <- median(act.day$Steps, na.rm=TRUE)
 median(act.median)
 ```
@@ -83,7 +83,7 @@ median(act.median)
 ## What is the average daily activity pattern?
 
 ### 1. Make a Time Series Plot of Average Daily Actvity
-```{r}
+```{r echo=TRUE}
 png("AVEplot.png", width=480, height=480, bg="white")
 
 plot(act.meanint)
@@ -93,7 +93,7 @@ dev.off()
 ### 2. which interval, on average across all the days contains the maximum number of steps
 
 ### Which Row and Mean Value
-```{r}
+```{r echo=TRUE}
 which.max( act.meanint[,2])
 max(act.meanint[,2])
 
@@ -114,8 +114,47 @@ act.NA <- merge(act, act.meanint, by = "Interval", sort = FALSE)
 
 act.NA$Steps <- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps <- NULL
-
 ```
+```{r echo=TRUE}
 
+act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$date), sum)
+names(act.day2)[1] <- "Date"
+names(act.day2)[2] <- "Steps"
+```
+### 4. Create a Histogram of Total Number of Steps per day
+png("ACTday2.png", width=480, height=480, bg="white")
 
+hist(act.day2$Steps, 
+  main = "Total Number of Steps Take Each Day (NA replaced)",
+  xlab= "Total Number of Steps Taken")
+  ylab= "Frequency"
+  
+  dev.off()
+```
+#### 4.B Find Mean and Median total number of steps taken per day
+``` {r echo=TRUE}
+mean(act.day2$Steps)
+median(act.day2$Steps)
+```
 ## Are there differences in activity patterns between weekdays and weekends?
+``` {r echo=TRUE}
+
+act.day2$weekdayType <- ifelse(weekdays(act.day2$Date) %in% 
+                                c("Saturday", "Sunday"), 
+                                "weekend", "weekday")
+head(act.week)
+
+act.week <- function(date) {
+    if (weekdays(as.Date(date)) %in% c("Saturday", "Sunday")) {
+        "weekend"
+    } else {
+        "weekday"
+    }
+}
+activity$act.week <- as.factor(sapply(act.week$date, act.week))
+
+
+df$day <- weekdays(as.Date(df$date))
+act.day2$day <- weekdays(as.Date(act.day2$Date))
+
+act.week <- act.day2
