@@ -22,48 +22,16 @@ install.packages("dplyr")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'dplyr' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 install.packages("lattice")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'lattice' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
@@ -72,15 +40,7 @@ install.packages("tidyr")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'tidyr' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
@@ -89,15 +49,7 @@ install.packages("lubridate")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'lubridate' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
@@ -230,11 +182,6 @@ act.NA$MeanSteps <- NULL
 act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$Date), sum)
 names(act.day2)[1] <- "Date"
 names(act.day2)[2] <- "Steps"
-
-
-act.day2 <- aggregate(act.NA2$Steps, by =list(act.NA2$Date), sum)
-names(act.day2)[1] <- "Date"
-names(act.day2)[2] <- "Steps"
 ```
 ### 4. Create a Histogram of Total Number of Steps per day
 
@@ -265,7 +212,7 @@ median(act.day2$Steps)
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
 
-### Create a new factor in th dataset by weekday and weekend
+### 1. Create a new factor in th dataset by weekday and weekend
 
 ```r
 act.NA2$Weekday <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
@@ -273,26 +220,18 @@ act.NA2$Weekday <-ifelse(weekdays(as.Date(act.day2$Date)) %in%
                                 "weekend", "weekday")
 ```
 
-### Make a panel plot containting a time series plot of the 5-minute interval and the average number
-### of steps taken averaged across weekday days and weekend days. Use the simulated data.
+### 2. Make a panel plot containting a time series plot of the 5-minute interval and the average number of steps taken averaged across weekday days and weekend days. Use the simulated data.
 
 
 ```r
-act.NA2$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
-                                   c("Saturday", "Sunday"), 
-                                "weekend", "weekday")
-
-act.meanintweekday <- aggregate(act.NA2$Steps, by=list(act.NA2$Interval, act.NA2$Weekday2), mean, na.rm=TRUE, na.action=NULL)
+act.meanintweekday <- aggregate(act.NA2$Steps, by=list(act.NA2$Interval, act.NA2$Weekday), mean, na.rm=TRUE, na.action=NULL)
 names(act.meanintweekday)[1] <- "Interval"
 names(act.meanintweekday)[2] <- "Weekday"
 names(act.meanintweekday)[3] <- "MeanSteps"
 
-
-xyplot(act.meanintweekday$MeanSteps ~ act.meanintweekday$Interval | act.meanintweekday$Weekday,
-       layout=c(1,2),
-       type="1",
-       xlab = "Interval",
-       ylab = "Number of Steps")
+xyplot(MeanSteps ~ Interval | Weekday, data=act.meanintweekday, layout = c(1, 2),
+        xlab = "Interval", ylab = "Average number of steps per Interval", 
+        type = "l", lwd = 2)
 ```
 
 ![plot of chunk unnamed-chunk-19](figure/unnamed-chunk-19-1.png) 
