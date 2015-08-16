@@ -25,6 +25,8 @@ install.packages("tidyr")
 library(tidyr)
 install.packages("lubridate")
 library(lubridate)
+install.packages("ggplot2")
+library(ggplot2)
 ````
 ### Change Date format to column with date type
 ```{r}
@@ -87,15 +89,19 @@ median(act.median)
 ```{r echo=TRUE}
 png("AVEplot.png", width=480, height=480, bg="white")
 
-plot(act.meanint$Interval, act.meanint$Steps)
+plot(act.meanint)
 
 dev.off()
 ```
 ### 2. which interval, on average across all the days contains the maximum number of steps
 
-### Which Row and Mean Value
+### Which Row 
 ```{r echo=TRUE}
 which.max( act.meanint[,2])
+
+```
+### What is the Mean Value 
+``` {r echo=TRUE}
 max(act.meanint[,2])
 
 ```
@@ -113,16 +119,14 @@ act.NA <- merge(act, act.meanint, by = "Interval", sort = FALSE)
 names(act.NA)[3] <- "Date"
 
 # Sort data by Date and Interval columns
-#act.NA2 <- act.NA[order(act.NA$Date, act.NA$Interval) , ]
-act.NA2$Steps <- ifelse(is.na(act.NA2$Steps), act.NA2$MeanSteps, act.NA2$Steps)
+act.NA <- act.NA[order(act.NA$Date, act.NA$Interval) , ]
+
 act.NA$Steps <- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps <- NULL
-act.NA2$MeanSteps <- NULL
+
 ```
 ### 3. New dataset to reflect no missing values
 ```{r echo=TRUE}
-
-
 
 act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$Date), sum)
 names(act.day2)[1] <- "Date"
@@ -139,8 +143,8 @@ png("ACTday2.png", width=480, height=480, bg="white")
 
 hist(act.day2$Steps, 
   main = "Total Number of Steps Take Each Day (NA replaced)",
-  xlab= "Total Number of Steps Taken")
-  ylab= "Frequency"
+  xlab= "Total Number of Steps Taken",
+  ylab= "Frequency")
   
   dev.off()
 ```
@@ -154,7 +158,7 @@ median(act.day2$Steps)
 ### Create a new factor in th dataset by weekday and weekend
 ``` {r echo=TRUE}
 
-act.NA2$Weekday2 <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
+act.NA2$Weekday <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
                                    c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
 
@@ -165,8 +169,8 @@ act.NA2$Weekday2 <-ifelse(weekdays(as.Date(act.day2$Date)) %in%
 ### of steps taken averaged across weekday days and weekend days. Use the simulated data.
 
 ``` {r echo=TRUE}
-act.
-act.NA$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
+
+act.NA2$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
                                    c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
 
