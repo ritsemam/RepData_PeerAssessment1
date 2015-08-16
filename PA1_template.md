@@ -30,7 +30,7 @@ install.packages("dplyr")
 ## package 'dplyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
 ```
 
 ```r
@@ -63,7 +63,7 @@ install.packages("lattice")
 ## package 'lattice' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
 ```
 
 ```r
@@ -80,7 +80,7 @@ install.packages("tidyr")
 ## package 'tidyr' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
 ```
 
 ```r
@@ -97,7 +97,7 @@ install.packages("lubridate")
 ## package 'lubridate' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
 ```
 
 ```r
@@ -160,7 +160,7 @@ hist(act.day$Steps,
 ```
 
 ```
-## png 
+## pdf 
 ##   2
 ```
 ### 2. Calcutae and report the mean and median totla bumber of steps taken  
@@ -200,7 +200,7 @@ dev.off()
 ```
 
 ```
-## png 
+## pdf 
 ##   2
 ```
 ### 2. which interval, on average across all the days contains the maximum number of steps

@@ -15,8 +15,7 @@ names(act)[1] <- "Steps"
 names(act)[3] <- "Interval"
 ```
 ### 2. Process/Transform the data into a format suitab;e for your analysis
-```{r{}}
-
+```{r}
 
 install.packages("dplyr")
 library(dplyr)
@@ -26,8 +25,6 @@ install.packages("tidyr")
 library(tidyr)
 install.packages("lubridate")
 library(lubridate)
-install.packages("ggplot2")
-library(ggplot2)
 ````
 ### Change Date format to column with date type
 ```{r}
@@ -65,12 +62,12 @@ png("ACTday.png", width=480, height=480, bg="white")
 
 hist(act.day$Steps, 
   main = "Total Number of Steps Take Each Day",
-  xlab= "Total Number of Steps Taken")
-  ylab= "Frequency"
+  xlab= "Total Number of Steps Taken",
+  ylab= "Frequency")
   
   dev.off()
 ```
-### 2. Calcutae and report the mean and median totla bumber of steps taken  
+### 2. Calculate and report the mean and median total number of steps taken  
   
 ### Mean number of steps taken each day  
 ```{r echo=TRUE}
@@ -90,7 +87,7 @@ median(act.median)
 ```{r echo=TRUE}
 png("AVEplot.png", width=480, height=480, bg="white")
 
-plot(act.meanint)
+plot(act.meanint$Interval, act.meanint$Steps)
 
 dev.off()
 ```
