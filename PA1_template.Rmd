@@ -60,14 +60,11 @@ names(act.meanint)[2] <- "MeanSteps"
 ```{r echo=TRUE}
 act.dayNA <- act.day[!is.na(act.day$Steps), ]
 
-png("ACTday.png", width=480, height=480, bg="white")
-
 hist(act.day$Steps, 
   main = "Total Number of Steps Take Each Day",
   xlab= "Total Number of Steps Taken",
   ylab= "Frequency")
-  
-  dev.off()
+
 ```
 ### 2. Calculate and report the mean and median total number of steps taken  
   
@@ -87,11 +84,11 @@ median(act.median)
 
 ### 1. Make a Time Series Plot of Average Daily Actvity
 ```{r echo=TRUE}
-png("AVEplot.png", width=480, height=480, bg="white")
+
 
 plot(act.meanint)
 
-dev.off()
+
 ```
 ### 2. which interval, on average across all the days contains the maximum number of steps
 
@@ -139,14 +136,13 @@ names(act.day2)[2] <- "Steps"
 
 ```
 ### 4. Create a Histogram of Total Number of Steps per day
-png("ACTday2.png", width=480, height=480, bg="white")
+```{r echo=TRUE}
 
 hist(act.day2$Steps, 
   main = "Total Number of Steps Take Each Day (NA replaced)",
   xlab= "Total Number of Steps Taken",
   ylab= "Frequency")
-  
-  dev.off()
+
 ```
 #### 4.B Find Mean and Median total number of steps taken per day
 ``` {r echo=TRUE}
@@ -161,8 +157,6 @@ median(act.day2$Steps)
 act.NA2$Weekday <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
                                    c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
-
-
 ```
 
 ### Make a panel plot containting a time series plot of the 5-minute interval and the average number
@@ -179,7 +173,7 @@ names(act.meanintweekday)[1] <- "Interval"
 names(act.meanintweekday)[2] <- "Weekday"
 names(act.meanintweekday)[3] <- "MeanSteps"
 
-
+tsplot(act.meanintweekday.ts)
 weekdayplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekday", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekdays")
 weekendplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekend", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekends")
 ```
