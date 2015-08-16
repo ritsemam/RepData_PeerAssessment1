@@ -173,7 +173,7 @@ names(act.meanintweekday)[1] <- "Interval"
 names(act.meanintweekday)[2] <- "Weekday"
 names(act.meanintweekday)[3] <- "MeanSteps"
 
-tsplot(act.meanintweekday.ts)
+
 weekdayplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekday", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekdays")
 weekendplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekend", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekends")
 ```
