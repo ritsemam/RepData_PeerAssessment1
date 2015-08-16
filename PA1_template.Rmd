@@ -34,19 +34,19 @@ act$date <- as.Date(act$date , format = "%Y-%m-%d")
 ```
 ### Create total steps per day
 ```{r}
-act.day <- aggregate(act$steps, by =list (act$date), sum)
+act.day <- aggregate(act$Steps, by =list (act$date), sum)
 names(act.day)[1] <- "Date"
 names(act.day)[2] <- "Steps"
 ```
 ### Create total steps per interval
 ```{r}
-act.int <- aggregate(act$steps, by=list (act$interval), sum, na.rm=TRUE, na.action=NULL)
+act.int <- aggregate(act$Steps, by=list (act$Interval), sum, na.rm=TRUE, na.action=NULL)
 names(act.int)[1] <- "Interval"
 names(act.int)[2] <- "Steps"
 ```
 ### Create dataframe with with mean steps per interval
 ```{r}
-act.meanint <- aggregate(act$steps, by=list(act$interval), mean, na.rm=TRUE, na.action=NULL)
+act.meanint <- aggregate(act$Steps, by=list(act$Interval), mean, na.rm=TRUE, na.action=NULL)
 names(act.meanint)[1] <- "Interval"
 names(act.meanint)[2] <- "MeanSteps"
 ```
@@ -97,8 +97,6 @@ dev.off()
 which.max( act.meanint[,2])
 max(act.meanint[,2])
 
-
-
 ```
 ## Imputing missing values
 
@@ -115,11 +113,15 @@ act.NA <- merge(act, act.meanint, by = "Interval", sort = FALSE)
 act.NA$Steps <- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps <- NULL
 ```
+### 3. New dataset to reflect no missing values
 ```{r echo=TRUE}
+
+
 
 act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$date), sum)
 names(act.day2)[1] <- "Date"
 names(act.day2)[2] <- "Steps"
+
 ```
 ### 4. Create a Histogram of Total Number of Steps per day
 png("ACTday2.png", width=480, height=480, bg="white")
@@ -137,24 +139,15 @@ mean(act.day2$Steps)
 median(act.day2$Steps)
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
+
+### Create a new factor in th dataset by weekday and weekend
 ``` {r echo=TRUE}
 
-act.day2$weekdayType <- ifelse(weekdays(act.day2$Date) %in% 
-                                c("Saturday", "Sunday"), 
+act.day2$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
+                                   c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
-head(act.week)
 
-act.week <- function(date) {
-    if (weekdays(as.Date(date)) %in% c("Saturday", "Sunday")) {
-        "weekend"
-    } else {
-        "weekday"
-    }
-}
-activity$act.week <- as.factor(sapply(act.week$date, act.week))
+```
 
-
-df$day <- weekdays(as.Date(df$date))
-act.day2$day <- weekdays(as.Date(act.day2$Date))
-
-act.week <- act.day2
+### Make a panel plot containting a time series plot of the 5-minute interval and the average number
+### of steps taken averaged across weekday days and weekend days. Use the simulated data.
