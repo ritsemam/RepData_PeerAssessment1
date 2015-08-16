@@ -18,6 +18,90 @@ names(act)[3] <- "Interval"
 ### 2. Process/Transform the data into a format suitab;e for your analysis
 
 ```r
+install.packages("dplyr")
+```
+
+```
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'dplyr' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+```
+
+```r
+library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
+install.packages("lattice")
+```
+
+```
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'lattice' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+```
+
+```r
+library(lattice)
+install.packages("tidyr")
+```
+
+```
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'tidyr' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+```
+
+```r
+library(tidyr)
+install.packages("lubridate")
+```
+
+```
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'lubridate' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\Rtmp6Hrdh1\downloaded_packages
+```
+
+```r
+library(lubridate)
 install.packages("ggplot2")
 ```
 
@@ -27,87 +111,33 @@ install.packages("ggplot2")
 
 ```r
 library(ggplot2)
-install.packages("dplyr")
-```
-
-```
-## Error in install.packages : Updating loaded packages
-```
-
-```r
-library(dplyr)
-install.packages("lattice")
-```
-
-```
-## Error in install.packages : Updating loaded packages
-```
-
-```r
-library(lattice)
-install.packages("tidyr")
-```
-
-```
-## Error in install.packages : Updating loaded packages
-```
-
-```r
-library(tidyr)
-install.packages("lubridate")
-```
-
-```
-## Error in install.packages : Updating loaded packages
-```
-
-```r
-library(lubridate)
 ```
 ### Change Date format to column with date type
 
 ```r
 act$date <- as.Date(act$date , format = "%Y-%m-%d")
+
+act <- act[order(act$date, act$Interval) , ]
+names(act)[2] <- "Date"
 ```
 ### Create total steps per day
 
 ```r
-act.day <- aggregate(act$steps, by =list (act$date), sum)
-```
-
-```
-## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-```
-
-```r
+act.day <- aggregate(act$Steps, by =list (act$Date), sum)
 names(act.day)[1] <- "Date"
 names(act.day)[2] <- "Steps"
 ```
 ### Create total steps per interval
 
 ```r
-act.int <- aggregate(act$steps, by=list (act$interval), sum, na.rm=TRUE, na.action=NULL)
-```
-
-```
-## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-```
-
-```r
+act.int <- aggregate(act$Steps, by=list (act$Interval), sum, na.rm=TRUE, na.action=NULL)
 names(act.int)[1] <- "Interval"
 names(act.int)[2] <- "Steps"
 ```
 ### Create dataframe with with mean steps per interval
 
 ```r
-act.meanint <- aggregate(act$steps, by=list(act$interval), mean, na.rm=TRUE, na.action=NULL)
-```
-
-```
-## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-```
-
-```r
+act.meanint <- aggregate(act$Steps, by=list(act$Interval), mean, na.rm=TRUE, na.action=NULL)
 names(act.meanint)[1] <- "Interval"
 names(act.meanint)[2] <- "MeanSteps"
 ```
@@ -130,8 +160,8 @@ hist(act.day$Steps,
 ```
 
 ```
-## RStudioGD 
-##         2
+## png 
+##   2
 ```
 ### 2. Calcutae and report the mean and median totla bumber of steps taken  
   
@@ -170,8 +200,8 @@ dev.off()
 ```
 
 ```
-## RStudioGD 
-##         2
+## png 
+##   2
 ```
 ### 2. which interval, on average across all the days contains the maximum number of steps
 
@@ -208,13 +238,24 @@ sum(!complete.cases(act))
 ```r
 act.NA <- merge(act, act.meanint, by = "Interval", sort = FALSE)
 ## replace NA in Steps with MeanSteps value
+names(act.NA)[3] <- "Date"
 
+# Sort data by Date and Interval columns
+#act.NA2 <- act.NA[order(act.NA$Date, act.NA$Interval) , ]
+act.NA2$Steps <- ifelse(is.na(act.NA2$Steps), act.NA2$MeanSteps, act.NA2$Steps)
 act.NA$Steps <- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps <- NULL
+act.NA2$MeanSteps <- NULL
 ```
+### 3. New dataset to reflect no missing values
 
 ```r
-act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$date), sum)
+act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$Date), sum)
+names(act.day2)[1] <- "Date"
+names(act.day2)[2] <- "Steps"
+
+
+act.day2 <- aggregate(act.NA2$Steps, by =list(act.NA2$Date), sum)
 names(act.day2)[1] <- "Date"
 names(act.day2)[2] <- "Steps"
 ```
@@ -247,48 +288,37 @@ median(act.day2$Steps)
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
 
+### Create a new factor in th dataset by weekday and weekend
+
 ```r
-act.day2$weekdayType <- ifelse(weekdays(act.day2$Date) %in% 
-                                c("Saturday", "Sunday"), 
+act.NA2$Weekday2 <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
+                                   c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
-head(act.week)
+```
+
+### Make a panel plot containting a time series plot of the 5-minute interval and the average number
+### of steps taken averaged across weekday days and weekend days. Use the simulated data.
+
+
+```r
+act.
 ```
 
 ```
-##         Date    Steps weekdayType       day
-## 1 2012-10-01 10766.19     weekday    Monday
-## 2 2012-10-02   126.00     weekday   Tuesday
-## 3 2012-10-03 11352.00     weekday Wednesday
-## 4 2012-10-04 12116.00     weekday  Thursday
-## 5 2012-10-05 13294.00     weekday    Friday
-## 6 2012-10-06 15420.00     weekend  Saturday
+## Error in eval(expr, envir, enclos): object 'act.' not found
 ```
 
 ```r
-act.week <- function(date) {
-    if (weekdays(as.Date(date)) %in% c("Saturday", "Sunday")) {
-        "weekend"
-    } else {
-        "weekday"
-    }
-}
-activity$act.week <- as.factor(sapply(act.week$date, act.week))
-```
+act.NA$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
+                                   c("Saturday", "Sunday"), 
+                                "weekend", "weekday")
 
-```
-## Error in act.week$date: object of type 'closure' is not subsettable
-```
+act.meanintweekday <- aggregate(act.NA2$Steps, by=list(act.NA2$Interval, act.NA2$Weekday2), mean, na.rm=TRUE, na.action=NULL)
+names(act.meanintweekday)[1] <- "Interval"
+names(act.meanintweekday)[2] <- "Weekday"
+names(act.meanintweekday)[3] <- "MeanSteps"
 
-```r
-df$day <- weekdays(as.Date(df$date))
-```
 
-```
-## Error in df$date: object of type 'closure' is not subsettable
-```
-
-```r
-act.day2$day <- weekdays(as.Date(act.day2$Date))
-
-act.week <- act.day2
+weekdayplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekday", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekdays")
+weekendplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekend", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekends")
 ```

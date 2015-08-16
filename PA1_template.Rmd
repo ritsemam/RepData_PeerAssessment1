@@ -17,8 +17,7 @@ names(act)[3] <- "Interval"
 ### 2. Process/Transform the data into a format suitab;e for your analysis
 ```{r{}}
 
-install.packages("ggplot2")
-library(ggplot2)
+
 install.packages("dplyr")
 library(dplyr)
 install.packages("lattice")
@@ -27,6 +26,8 @@ install.packages("tidyr")
 library(tidyr)
 install.packages("lubridate")
 library(lubridate)
+install.packages("ggplot2")
+library(ggplot2)
 ````
 ### Change Date format to column with date type
 ```{r}
