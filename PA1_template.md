@@ -22,16 +22,48 @@ install.packages("dplyr")
 ```
 
 ```
-## Error in install.packages : Updating loaded packages
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'dplyr' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
 ```
 
 ```r
 library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 install.packages("lattice")
 ```
 
 ```
-## Error in install.packages : Updating loaded packages
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'lattice' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
 ```
 
 ```r
@@ -40,7 +72,15 @@ install.packages("tidyr")
 ```
 
 ```
-## Error in install.packages : Updating loaded packages
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'tidyr' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
 ```
 
 ```r
@@ -49,20 +89,19 @@ install.packages("lubridate")
 ```
 
 ```
-## Error in install.packages : Updating loaded packages
+## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
+## (as 'lib' is unspecified)
+```
+
+```
+## package 'lubridate' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\Matt\AppData\Local\Temp\RtmpygkZLb\downloaded_packages
 ```
 
 ```r
 library(lubridate)
-install.packages("ggplot2")
-```
-
-```
-## Error in install.packages : Updating loaded packages
-```
-
-```r
-library(ggplot2)
 ```
 ### Change Date format to column with date type
 
@@ -101,20 +140,13 @@ names(act.meanint)[2] <- "MeanSteps"
 ```r
 act.dayNA <- act.day[!is.na(act.day$Steps), ]
 
-png("ACTday.png", width=480, height=480, bg="white")
-
 hist(act.day$Steps, 
   main = "Total Number of Steps Take Each Day",
   xlab= "Total Number of Steps Taken",
   ylab= "Frequency")
-  
-  dev.off()
 ```
 
-```
-## png 
-##   2
-```
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
 ### 2. Calculate and report the mean and median total number of steps taken  
   
 ### Mean number of steps taken each day  
@@ -144,17 +176,10 @@ median(act.median)
 ### 1. Make a Time Series Plot of Average Daily Actvity
 
 ```r
-png("AVEplot.png", width=480, height=480, bg="white")
-
 plot(act.meanint)
-
-dev.off()
 ```
 
-```
-## png 
-##   2
-```
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 ### 2. which interval, on average across all the days contains the maximum number of steps
 
 ### Which Row 
@@ -212,15 +237,15 @@ names(act.day2)[1] <- "Date"
 names(act.day2)[2] <- "Steps"
 ```
 ### 4. Create a Histogram of Total Number of Steps per day
-png("ACTday2.png", width=480, height=480, bg="white")
 
+```r
 hist(act.day2$Steps, 
   main = "Total Number of Steps Take Each Day (NA replaced)",
   xlab= "Total Number of Steps Taken",
   ylab= "Frequency")
-  
-  dev.off()
 ```
+
+![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16-1.png) 
 #### 4.B Find Mean and Median total number of steps taken per day
 
 ```r
@@ -263,6 +288,11 @@ names(act.meanintweekday)[2] <- "Weekday"
 names(act.meanintweekday)[3] <- "MeanSteps"
 
 
-weekdayplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekday", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekdays")
-weekendplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekend", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekends")
+xyplot(act.meanintweekday$MeanSteps ~ act.meanintweekday$Interval | act.meanintweekday$Weekday,
+       layout=c(1,2),
+       type="1",
+       xlab = "Interval",
+       ylab = "Number of Steps")
 ```
+
+![plot of chunk unnamed-chunk-19](figure/unnamed-chunk-19-1.png) 
