@@ -22,48 +22,16 @@ install.packages("dplyr")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'dplyr' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 install.packages("lattice")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'lattice' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
@@ -72,15 +40,7 @@ install.packages("tidyr")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'tidyr' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
@@ -89,15 +49,7 @@ install.packages("lubridate")
 ```
 
 ```
-## Installing package into 'C:/Users/Matt/Documents/R/win-library/3.1'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'lubridate' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\Matt\AppData\Local\Temp\RtmpuSNcRJ\downloaded_packages
+## Error in install.packages : Updating loaded packages
 ```
 
 ```r
@@ -153,17 +105,17 @@ png("ACTday.png", width=480, height=480, bg="white")
 
 hist(act.day$Steps, 
   main = "Total Number of Steps Take Each Day",
-  xlab= "Total Number of Steps Taken")
-  ylab= "Frequency"
+  xlab= "Total Number of Steps Taken",
+  ylab= "Frequency")
   
   dev.off()
 ```
 
 ```
-## pdf 
+## png 
 ##   2
 ```
-### 2. Calcutae and report the mean and median totla bumber of steps taken  
+### 2. Calculate and report the mean and median total number of steps taken  
   
 ### Mean number of steps taken each day  
 
@@ -200,12 +152,12 @@ dev.off()
 ```
 
 ```
-## pdf 
+## png 
 ##   2
 ```
 ### 2. which interval, on average across all the days contains the maximum number of steps
 
-### Which Row and Mean Value
+### Which Row 
 
 ```r
 which.max( act.meanint[,2])
@@ -214,6 +166,7 @@ which.max( act.meanint[,2])
 ```
 ## [1] 104
 ```
+### What is the Mean Value 
 
 ```r
 max(act.meanint[,2])
@@ -241,11 +194,10 @@ act.NA <- merge(act, act.meanint, by = "Interval", sort = FALSE)
 names(act.NA)[3] <- "Date"
 
 # Sort data by Date and Interval columns
-#act.NA2 <- act.NA[order(act.NA$Date, act.NA$Interval) , ]
-act.NA2$Steps <- ifelse(is.na(act.NA2$Steps), act.NA2$MeanSteps, act.NA2$Steps)
+act.NA <- act.NA[order(act.NA$Date, act.NA$Interval) , ]
+
 act.NA$Steps <- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps <- NULL
-act.NA2$MeanSteps <- NULL
 ```
 ### 3. New dataset to reflect no missing values
 
@@ -264,8 +216,8 @@ png("ACTday2.png", width=480, height=480, bg="white")
 
 hist(act.day2$Steps, 
   main = "Total Number of Steps Take Each Day (NA replaced)",
-  xlab= "Total Number of Steps Taken")
-  ylab= "Frequency"
+  xlab= "Total Number of Steps Taken",
+  ylab= "Frequency")
   
   dev.off()
 ```
@@ -291,7 +243,7 @@ median(act.day2$Steps)
 ### Create a new factor in th dataset by weekday and weekend
 
 ```r
-act.NA2$Weekday2 <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
+act.NA2$Weekday <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
                                    c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
 ```
@@ -301,15 +253,7 @@ act.NA2$Weekday2 <-ifelse(weekdays(as.Date(act.day2$Date)) %in%
 
 
 ```r
-act.
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'act.' not found
-```
-
-```r
-act.NA$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
+act.NA2$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
                                    c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
 

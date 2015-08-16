@@ -212,14 +212,7 @@ names(act)[3] &lt;- &quot;Interval&quot;
 
 <h3>2. Process/Transform the data into a format suitab;e for your analysis</h3>
 
-<pre><code class="r">install.packages(&quot;ggplot2&quot;)
-</code></pre>
-
-<pre><code>## Error in install.packages : Updating loaded packages
-</code></pre>
-
-<pre><code class="r">library(ggplot2)
-install.packages(&quot;dplyr&quot;)
+<pre><code class="r">install.packages(&quot;dplyr&quot;)
 </code></pre>
 
 <pre><code>## Error in install.packages : Updating loaded packages
@@ -247,46 +240,41 @@ install.packages(&quot;lubridate&quot;)
 </code></pre>
 
 <pre><code class="r">library(lubridate)
+install.packages(&quot;ggplot2&quot;)
+</code></pre>
+
+<pre><code>## Error in install.packages : Updating loaded packages
+</code></pre>
+
+<pre><code class="r">library(ggplot2)
 </code></pre>
 
 <h3>Change Date format to column with date type</h3>
 
 <pre><code class="r">act$date &lt;- as.Date(act$date , format = &quot;%Y-%m-%d&quot;)
+
+act &lt;- act[order(act$date, act$Interval) , ]
+names(act)[2] &lt;- &quot;Date&quot;
 </code></pre>
 
 <h3>Create total steps per day</h3>
 
-<pre><code class="r">act.day &lt;- aggregate(act$steps, by =list (act$date), sum)
-</code></pre>
-
-<pre><code>## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-</code></pre>
-
-<pre><code class="r">names(act.day)[1] &lt;- &quot;Date&quot;
+<pre><code class="r">act.day &lt;- aggregate(act$Steps, by =list (act$Date), sum)
+names(act.day)[1] &lt;- &quot;Date&quot;
 names(act.day)[2] &lt;- &quot;Steps&quot;
 </code></pre>
 
 <h3>Create total steps per interval</h3>
 
-<pre><code class="r">act.int &lt;- aggregate(act$steps, by=list (act$interval), sum, na.rm=TRUE, na.action=NULL)
-</code></pre>
-
-<pre><code>## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-</code></pre>
-
-<pre><code class="r">names(act.int)[1] &lt;- &quot;Interval&quot;
+<pre><code class="r">act.int &lt;- aggregate(act$Steps, by=list (act$Interval), sum, na.rm=TRUE, na.action=NULL)
+names(act.int)[1] &lt;- &quot;Interval&quot;
 names(act.int)[2] &lt;- &quot;Steps&quot;
 </code></pre>
 
 <h3>Create dataframe with with mean steps per interval</h3>
 
-<pre><code class="r">act.meanint &lt;- aggregate(act$steps, by=list(act$interval), mean, na.rm=TRUE, na.action=NULL)
-</code></pre>
-
-<pre><code>## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-</code></pre>
-
-<pre><code class="r">names(act.meanint)[1] &lt;- &quot;Interval&quot;
+<pre><code class="r">act.meanint &lt;- aggregate(act$Steps, by=list(act$Interval), mean, na.rm=TRUE, na.action=NULL)
+names(act.meanint)[1] &lt;- &quot;Interval&quot;
 names(act.meanint)[2] &lt;- &quot;MeanSteps&quot;
 </code></pre>
 
@@ -300,17 +288,17 @@ png(&quot;ACTday.png&quot;, width=480, height=480, bg=&quot;white&quot;)
 
 hist(act.day$Steps, 
   main = &quot;Total Number of Steps Take Each Day&quot;,
-  xlab= &quot;Total Number of Steps Taken&quot;)
-  ylab= &quot;Frequency&quot;
+  xlab= &quot;Total Number of Steps Taken&quot;,
+  ylab= &quot;Frequency&quot;)
 
   dev.off()
 </code></pre>
 
-<pre><code>## RStudioGD 
-##         2
+<pre><code>## png 
+##   2
 </code></pre>
 
-<h3>2. Calcutae and report the mean and median totla bumber of steps taken</h3>
+<h3>2. Calculate and report the mean and median total number of steps taken</h3>
 
 <h3>Mean number of steps taken each day</h3>
 
@@ -341,19 +329,21 @@ plot(act.meanint)
 dev.off()
 </code></pre>
 
-<pre><code>## RStudioGD 
-##         2
+<pre><code>## png 
+##   2
 </code></pre>
 
 <h3>2. which interval, on average across all the days contains the maximum number of steps</h3>
 
-<h3>Which Row and Mean Value</h3>
+<h3>Which Row</h3>
 
 <pre><code class="r">which.max( act.meanint[,2])
 </code></pre>
 
 <pre><code>## [1] 104
 </code></pre>
+
+<h3>What is the Mean Value</h3>
 
 <pre><code class="r">max(act.meanint[,2])
 </code></pre>
@@ -375,12 +365,23 @@ dev.off()
 
 <pre><code class="r">act.NA &lt;- merge(act, act.meanint, by = &quot;Interval&quot;, sort = FALSE)
 ## replace NA in Steps with MeanSteps value
+names(act.NA)[3] &lt;- &quot;Date&quot;
+
+# Sort data by Date and Interval columns
+act.NA &lt;- act.NA[order(act.NA$Date, act.NA$Interval) , ]
 
 act.NA$Steps &lt;- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps &lt;- NULL
 </code></pre>
 
-<pre><code class="r">act.day2 &lt;- aggregate(act.NA$Steps, by =list(act.NA$date), sum)
+<h3>3. New dataset to reflect no missing values</h3>
+
+<pre><code class="r">act.day2 &lt;- aggregate(act.NA$Steps, by =list(act.NA$Date), sum)
+names(act.day2)[1] &lt;- &quot;Date&quot;
+names(act.day2)[2] &lt;- &quot;Steps&quot;
+
+
+act.day2 &lt;- aggregate(act.NA2$Steps, by =list(act.NA2$Date), sum)
 names(act.day2)[1] &lt;- &quot;Date&quot;
 names(act.day2)[2] &lt;- &quot;Steps&quot;
 </code></pre>
@@ -391,8 +392,8 @@ names(act.day2)[2] &lt;- &quot;Steps&quot;
 
 <p>hist(act.day2$Steps, 
   main = &ldquo;Total Number of Steps Take Each Day (NA replaced)&rdquo;,
-  xlab= &ldquo;Total Number of Steps Taken&rdquo;)
-  ylab= &ldquo;Frequency&rdquo;</p>
+  xlab= &ldquo;Total Number of Steps Taken&rdquo;,
+  ylab= &ldquo;Frequency&rdquo;)</p>
 
 <p>dev.off()</p>
 
@@ -413,43 +414,29 @@ mean(act.day2$Steps)
 
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 
-<pre><code class="r">act.day2$weekdayType &lt;- ifelse(weekdays(act.day2$Date) %in% 
-                                c(&quot;Saturday&quot;, &quot;Sunday&quot;), 
+<h3>Create a new factor in th dataset by weekday and weekend</h3>
+
+<pre><code class="r">act.NA2$Weekday &lt;-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
+                                   c(&quot;Saturday&quot;, &quot;Sunday&quot;), 
                                 &quot;weekend&quot;, &quot;weekday&quot;)
-head(act.week)
 </code></pre>
 
-<pre><code>##         Date    Steps weekdayType       day
-## 1 2012-10-01 10766.19     weekday    Monday
-## 2 2012-10-02   126.00     weekday   Tuesday
-## 3 2012-10-03 11352.00     weekday Wednesday
-## 4 2012-10-04 12116.00     weekday  Thursday
-## 5 2012-10-05 13294.00     weekday    Friday
-## 6 2012-10-06 15420.00     weekend  Saturday
-</code></pre>
+<h3>Make a panel plot containting a time series plot of the 5-minute interval and the average number</h3>
 
-<pre><code class="r">act.week &lt;- function(date) {
-    if (weekdays(as.Date(date)) %in% c(&quot;Saturday&quot;, &quot;Sunday&quot;)) {
-        &quot;weekend&quot;
-    } else {
-        &quot;weekday&quot;
-    }
-}
-activity$act.week &lt;- as.factor(sapply(act.week$date, act.week))
-</code></pre>
+<h3>of steps taken averaged across weekday days and weekend days. Use the simulated data.</h3>
 
-<pre><code>## Error in act.week$date: object of type &#39;closure&#39; is not subsettable
-</code></pre>
+<pre><code class="r">act.NA2$Weekday &lt;-ifelse(weekdays(act.day2$Date) %in% 
+                                   c(&quot;Saturday&quot;, &quot;Sunday&quot;), 
+                                &quot;weekend&quot;, &quot;weekday&quot;)
 
-<pre><code class="r">df$day &lt;- weekdays(as.Date(df$date))
-</code></pre>
+act.meanintweekday &lt;- aggregate(act.NA2$Steps, by=list(act.NA2$Interval, act.NA2$Weekday2), mean, na.rm=TRUE, na.action=NULL)
+names(act.meanintweekday)[1] &lt;- &quot;Interval&quot;
+names(act.meanintweekday)[2] &lt;- &quot;Weekday&quot;
+names(act.meanintweekday)[3] &lt;- &quot;MeanSteps&quot;
 
-<pre><code>## Error in df$date: object of type &#39;closure&#39; is not subsettable
-</code></pre>
 
-<pre><code class="r">act.day2$day &lt;- weekdays(as.Date(act.day2$Date))
-
-act.week &lt;- act.day2
+weekdayplot &lt;- ggplot(act.meanintweekday[act.meanintweekday$weekday == &quot;weekday&quot;, ], aes(x = Interval, y = MeanSteps)) + ggtitle(&quot;Weekdays&quot;)
+weekendplot &lt;- ggplot(act.meanintweekday[act.meanintweekday$weekday == &quot;weekend&quot;, ], aes(x = Interval, y = MeanSteps)) + ggtitle(&quot;Weekends&quot;)
 </code></pre>
 
 </body>
