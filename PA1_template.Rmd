@@ -31,10 +31,13 @@ library(lubridate)
 ### Change Date format to column with date type
 ```{r}
 act$date <- as.Date(act$date , format = "%Y-%m-%d")
+
+act <- act[order(act$date, act$Interval) , ]
+names(act)[2] <- "Date"
 ```
 ### Create total steps per day
 ```{r}
-act.day <- aggregate(act$Steps, by =list (act$date), sum)
+act.day <- aggregate(act$Steps, by =list (act$Date), sum)
 names(act.day)[1] <- "Date"
 names(act.day)[2] <- "Steps"
 ```
@@ -109,16 +112,26 @@ sum(!complete.cases(act))
 
 act.NA <- merge(act, act.meanint, by = "Interval", sort = FALSE)
 ## replace NA in Steps with MeanSteps value
+names(act.NA)[3] <- "Date"
 
+# Sort data by Date and Interval columns
+#act.NA2 <- act.NA[order(act.NA$Date, act.NA$Interval) , ]
+act.NA2$Steps <- ifelse(is.na(act.NA2$Steps), act.NA2$MeanSteps, act.NA2$Steps)
 act.NA$Steps <- ifelse(is.na(act.NA$Steps), act.NA$MeanSteps, act.NA$Steps)
 act.NA$MeanSteps <- NULL
+act.NA2$MeanSteps <- NULL
 ```
 ### 3. New dataset to reflect no missing values
 ```{r echo=TRUE}
 
 
 
-act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$date), sum)
+act.day2 <- aggregate(act.NA$Steps, by =list(act.NA$Date), sum)
+names(act.day2)[1] <- "Date"
+names(act.day2)[2] <- "Steps"
+
+
+act.day2 <- aggregate(act.NA2$Steps, by =list(act.NA2$Date), sum)
 names(act.day2)[1] <- "Date"
 names(act.day2)[2] <- "Steps"
 
@@ -143,11 +156,28 @@ median(act.day2$Steps)
 ### Create a new factor in th dataset by weekday and weekend
 ``` {r echo=TRUE}
 
-act.day2$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
+act.NA2$Weekday2 <-ifelse(weekdays(as.Date(act.day2$Date)) %in% 
                                    c("Saturday", "Sunday"), 
                                 "weekend", "weekday")
+
 
 ```
 
 ### Make a panel plot containting a time series plot of the 5-minute interval and the average number
 ### of steps taken averaged across weekday days and weekend days. Use the simulated data.
+
+``` {r echo=TRUE}
+act.
+act.NA$Weekday <-ifelse(weekdays(act.day2$Date) %in% 
+                                   c("Saturday", "Sunday"), 
+                                "weekend", "weekday")
+
+act.meanintweekday <- aggregate(act.NA2$Steps, by=list(act.NA2$Interval, act.NA2$Weekday2), mean, na.rm=TRUE, na.action=NULL)
+names(act.meanintweekday)[1] <- "Interval"
+names(act.meanintweekday)[2] <- "Weekday"
+names(act.meanintweekday)[3] <- "MeanSteps"
+
+
+weekdayplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekday", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekdays")
+weekendplot <- ggplot(act.meanintweekday[act.meanintweekday$weekday == "weekend", ], aes(x = Interval, y = MeanSteps)) + ggtitle("Weekends")
+```
